@@ -4,8 +4,9 @@ import Login from "./Login";
 import Register from "./Register";
 import Hello from "./Hello";
 import { Tags } from "./TagView";
-export default function ApplicationViews({ isLoggedIn }) {
+import { AllCategories } from "./Categories";
 
+export default function ApplicationViews({ isLoggedIn }) {
   return (
     <main>
       <Switch>
@@ -17,6 +18,10 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Login />
         </Route>
 
+        <Route path="/category">
+          <AllCategories />
+        </Route>
+
         <Route path="/register">
           <Register />
         </Route>
@@ -26,4 +31,4 @@ export default function ApplicationViews({ isLoggedIn }) {
       </Switch>
     </main>
   );
-};
+}
