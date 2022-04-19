@@ -27,8 +27,8 @@ namespace Tabloid.Repositories
                         {
                             categories.Add(new Category()
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name")
                             });
                         }
 
