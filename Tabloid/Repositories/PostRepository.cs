@@ -31,7 +31,8 @@ namespace Tabloid.Repositories
                           FROM Post p
                                LEFT JOIN UserProfile u ON p.UserProfileId = u.Id
                                LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
-                         WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()";
+                         WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()
+                      ORDER BY PublishDateTime DESC";
                     var reader = cmd.ExecuteReader();
 
                     var posts = new List<Post>();
