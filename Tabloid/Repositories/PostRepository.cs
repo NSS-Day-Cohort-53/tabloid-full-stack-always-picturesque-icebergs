@@ -6,41 +6,45 @@ using Tabloid.Utils;
 
 namespace Tabloid.Repositories
 {
-    public class PostRepository : BaseRepository
+    public class PostRepository : BaseRepository, IPostRepository
     {
         public PostRepository(IConfiguration configuration) : base(configuration) { }
 
         public List<Post> GetAllPublishedPosts()
         {
-            using (var cmd = Connection.CreateCommand())
+            using (var conn = Connection)
             {
-                cmd.CommandText = @"
-                    SELECT p.Id, p.Title, p.Content,
-                           p.ImageLocation AS HeaderImage,
-                           p.CreateDateTime, p.PublishDateTime, p.IsApproved,
-                           p.CategoryId, p.UserProfileId
-
-                           u.FirstName, u.LastName, u.DisplayName,
-                           u.Email, u.CreateDateTime, u.ImageLocation AS AvatarImage,
-                           u.UserTypeId,
-                           
-                           ut.[Name] AS UserTypeName
-                      FROM Post p
-                           LEFT JOIN UserProfile u ON p.UserProfileId = u.Id
-                           LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
-                     WHERE IsApproved = True AND PublishDateTime < SYSDATETIME()";
-                var reader = cmd.ExecuteReader();
-
-                var posts = new List<Post>();
-
-                while (reader.Read())
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
                 {
-                    posts.Add(NewPostFromReader(reader));
+                    cmd.CommandText = @"
+                        SELECT p.Id, p.Title, p.Content,
+                               p.ImageLocation AS HeaderImage,
+                               p.CreateDateTime, p.PublishDateTime,         p.IsApproved,
+                               p.CategoryId, p.UserProfileId,
+
+                               u.FirstName, u.LastName, u.DisplayName,
+                               u.Email, u.CreateDateTime, u.ImageLocation AS AvatarImage,
+                               u.UserTypeId,
+                           
+                               ut.[Name] AS UserTypeName
+                          FROM Post p
+                               LEFT JOIN UserProfile u ON p.UserProfileId = u.Id
+                               LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
+                         WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()";
+                    var reader = cmd.ExecuteReader();
+
+                    var posts = new List<Post>();
+
+                    while (reader.Read())
+                    {
+                        posts.Add(NewPostFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return posts;
                 }
-
-                reader.Close();
-
-                return posts;
             }
         }
 
