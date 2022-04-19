@@ -1,4 +1,4 @@
-import { getToken } from "../modules/authManager";
+import { getToken } from "./authManager";
 const baseUrl = 'api/Tag';
 
 

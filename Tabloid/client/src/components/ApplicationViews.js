@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import Hello from "./Hello";
-import { Tags } from "../modules/TagView";
+import { Tags } from "./TagView";
 export default function ApplicationViews({ isLoggedIn }) {
 
   return (

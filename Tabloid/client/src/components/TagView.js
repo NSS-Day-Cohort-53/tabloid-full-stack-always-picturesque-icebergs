@@ -1,4 +1,4 @@
-import { getAllTags } from '../components/TagManagment';
+import { getAllTags } from '../modules/TagManagment';
 import React, { useEffect, useState  } from 'react';
 
 

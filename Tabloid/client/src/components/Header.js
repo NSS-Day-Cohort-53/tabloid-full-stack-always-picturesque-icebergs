@@ -10,7 +10,7 @@ import {
   NavLink
 } from 'reactstrap';
 import { logout } from '../modules/authManager';
-import { Tags } from './TagManagment';
+import { Tags } from '../modules/TagManagment';
 
 export default function Header({ isLoggedIn }) {
   const [isOpen, setIsOpen] = useState(false);
