@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import Hello from "./Hello";
+import { Tags } from "./TagView";
 import { AllCategories } from "./Categories";
 
 export default function ApplicationViews({ isLoggedIn }) {
@@ -23,6 +24,9 @@ export default function ApplicationViews({ isLoggedIn }) {
 
         <Route path="/register">
           <Register />
+        </Route>
+        <Route path="/Tags">
+          <Tags />
         </Route>
       </Switch>
     </main>
