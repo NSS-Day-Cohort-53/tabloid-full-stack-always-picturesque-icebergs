@@ -80,7 +80,7 @@ namespace Tabloid.Repositories
                     UserType = new UserType()
                     {
                         Id = DbUtils.GetInt(reader, "UserProfileId"),
-                        Name = DbUtils.GetString(reader, "Name")
+                        Name = DbUtils.GetString(reader, "UserTypeName")
                     }
                 }
             };
