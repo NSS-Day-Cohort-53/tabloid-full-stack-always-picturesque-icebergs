@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Tabloid.Models;
+using Tabloid.Utils;
 
 namespace Tabloid.Repositories
 {
@@ -17,7 +18,7 @@ namespace Tabloid.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "Select id,name from Tag ORDER BY name asc";
+                    cmd.CommandText = "Select Id,Name from Tag ORDER BY name asc";
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -26,8 +27,8 @@ namespace Tabloid.Repositories
                         {
                             Tag tag = new Tag
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name"),
                             };
                             tags.Add(tag);
                         }
