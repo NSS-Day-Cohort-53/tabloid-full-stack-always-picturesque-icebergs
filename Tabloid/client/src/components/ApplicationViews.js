@@ -20,7 +20,7 @@ export default function ApplicationViews({ isLoggedIn }) {
         <Route path="/register">
           <Register />
         </Route>
-        <Route path="/tags">
+        <Route path="/Tags">
           <Tags />
         </Route>
       </Switch>
