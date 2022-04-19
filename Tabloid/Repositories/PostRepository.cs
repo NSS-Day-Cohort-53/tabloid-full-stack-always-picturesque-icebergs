@@ -20,11 +20,12 @@ namespace Tabloid.Repositories
                     cmd.CommandText = @"
                         SELECT p.Id, p.Title, p.Content,
                                p.ImageLocation AS HeaderImage,
-                               p.CreateDateTime, p.PublishDateTime,         p.IsApproved,
+                               p.CreateDateTime AS PostCreateDateTime,
+                               p.PublishDateTime, p.IsApproved,
                                p.CategoryId, p.UserProfileId,
 
                                u.FirstName, u.LastName, u.DisplayName,
-                               u.Email, u.CreateDateTime, u.ImageLocation AS AvatarImage,
+                               u.Email, u.CreateDateTime AS UserCreateDateTime, u.ImageLocation AS AvatarImage,
                                u.UserTypeId,
                            
                                ut.[Name] AS UserTypeName
@@ -49,32 +50,37 @@ namespace Tabloid.Repositories
             }
         }
 
+        /// <summary>
+        /// Helper function to retrieve a Post object from a reader.
+        /// </summary>
+        /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
+        /// <returns>A Post object found in the data from the Reader</returns>
         private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
             {
-                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                Title = reader.GetString(reader.GetOrdinal("Title")),
-                Content = reader.GetString(reader.GetOrdinal("Content")),
+                Id = DbUtils.GetInt(reader, "Id"),
+                Title = DbUtils.GetString(reader, "Title"),
+                Content = DbUtils.GetString(reader, "Content"),
                 ImageLocation = DbUtils.GetNullableString(reader, "HeaderImage"),
-                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                CreateDateTime = DbUtils.GetDateTime(reader, "PostCreateDateTime"),
                 PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
-                CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
-                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                CategoryId = DbUtils.GetInt(reader, "CategoryId"),
+                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                 UserProfile = new UserProfile()
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                    DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
-                    Email = reader.GetString(reader.GetOrdinal("Email")),
-                    CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                    Id = DbUtils.GetInt(reader, "UserProfileId"),
+                    FirstName = DbUtils.GetString(reader, "FirstName"),
+                    LastName = DbUtils.GetString(reader, "LastName"),
+                    DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                    Email = DbUtils.GetString(reader, "Email"),
+                    CreateDateTime = DbUtils.GetDateTime(reader, "UserCreateDateTime"),
                     ImageLocation = DbUtils.GetNullableString(reader, "AvatarImage"),
-                    UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+                    UserTypeId = DbUtils.GetInt(reader, "UserTypeId"),
                     UserType = new UserType()
                     {
-                        Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
-                        Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
+                        Id = DbUtils.GetInt(reader, "UserProfileId"),
+                        Name = DbUtils.GetString(reader, "Name")
                     }
                 }
             };
