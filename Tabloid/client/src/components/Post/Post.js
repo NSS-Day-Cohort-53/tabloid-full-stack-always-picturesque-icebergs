@@ -7,8 +7,8 @@ const Post = ({ post }) => {
         <Card>
             {post.imageLocation ? <img src={post.imageLocation} alt={post.Title}/> : null}
             <CardBody>
-                <Link className="text-left px-2" /*TODO have to property link to post details when working on relevant ticket*/>{post.title}</Link>
-                {post.Content}
+                <Link className="text-left px-2" to={`/posts/${post.id}`}>{post.title}</Link>
+                <p className="text-left px-2">{post.content}</p>
                 <p className="text-right px-2">Published on: {post.publishDateTime}</p>
             </CardBody>
         </Card>
