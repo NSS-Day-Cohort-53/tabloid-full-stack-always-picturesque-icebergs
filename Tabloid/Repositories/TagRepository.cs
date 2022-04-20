@@ -39,7 +39,7 @@ namespace Tabloid.Repositories
                 }
             }
 
-            
+
         }
 
 
@@ -51,12 +51,45 @@ namespace Tabloid.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @" INSERT Into Tag(Name)
-	                    values(@Name)";
+	                   OUTPUT INSERTED.ID values(@Name)";
                     cmd.Parameters.AddWithValue("@name", tag.Name);
 
                     tag.Id = (int)cmd.ExecuteScalar();
                 };
-                
+
+            }
+        }
+
+
+
+
+        public Tag getTagById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"select Id,Name from tag
+                    where id = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        Tag tag = null;
+                        if (reader.Read())
+                        {
+                            tag = new Tag()
+                            {
+                                Id = id,
+                                Name = DbUtils.GetString(reader, "Name"),
+                            };
+                        }
+                        return tag;
+                    }
+                }
+
+
             }
         }
     }

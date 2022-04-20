@@ -5,6 +5,7 @@ import Register from "./Register";
 import Hello from "./Hello";
 import PostList from "./Post/PostList";
 import { Tags } from "./TagView";
+import { CreateTag } from "./TagCreate";
 import { AllCategories } from "./Categories";
 
 export default function ApplicationViews({ isLoggedIn }) {
@@ -33,6 +34,11 @@ export default function ApplicationViews({ isLoggedIn }) {
         <Route path="/Tags">
           <Tags />
         </Route>
+        <Route path="/CreateTag">
+          <CreateTag/>
+          
+         </Route>
+
       </Switch>
     </main>
   );

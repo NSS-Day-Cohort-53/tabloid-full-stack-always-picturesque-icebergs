@@ -28,8 +28,19 @@ namespace Tabloid.Controllers
         public IActionResult Post(Tag tag)
         {
             _tagRepository.Add(tag);
-            return CreatedAtAction("Get", new { id = tag.Id }, tag);
+            return CreatedAtAction("Post", new { id = tag.Id }, tag);
 
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var tag = _tagRepository.getTagById(id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+            return Ok(tag);
         }
     }
 }

@@ -4,14 +4,15 @@ const baseUrl = 'api/Tag';
 
 
 export const addTag = (tag) => {
-  return fetch(baseUrl, {
+  return fetch(baseUrl,'/', {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(tag)
+    body: JSON.stringify(tag),
   });
 };
+
 
 export const getAllTags = () => {
   return getToken().then((token) => {
