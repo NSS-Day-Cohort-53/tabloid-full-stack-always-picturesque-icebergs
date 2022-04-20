@@ -23,7 +23,7 @@ export const Tags=()=>{
         <div>
             <h2>Tags:</h2>
            {tags.map(t=>
-            <h4 id={t.id}> {t.name}</h4> 
+            <h4 key={t.id}> {t.name}</h4> 
             )} 
 
           <Link to="/CreateTag">Create a tag</Link>
