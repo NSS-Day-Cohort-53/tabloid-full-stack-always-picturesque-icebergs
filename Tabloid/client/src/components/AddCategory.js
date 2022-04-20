@@ -12,14 +12,25 @@ export const AddCategoryForm = () => {
 
   const submit = (evt) => {
     evt.preventDefault();
-    addCategory(category).then(() => history.push("/category"));
+
+    const input = document.querySelector("#newCatInp").value;
+    if (
+      !input ||
+      input === "" ||
+      input.length == 0 ||
+      !input.replace(/\s/g, "").length
+    ) {
+      alert("no empty values allowed");
+    } else {
+      addCategory(category).then(() => history.push("/category"));
+    }
   };
 
   return (
     <>
       <h1>Create new category</h1>
       <p>Enter a category name</p>
-      <input onChange={handleCategory} />
+      <input id="newCatInp" onChange={handleCategory} />
       <button onClick={submit}>save</button>
     </>
   );
