@@ -29,7 +29,7 @@ namespace Tabloid.Controllers
         public IActionResult Post (Category category)
         {
             _categoryRepo.AddCategory(category);
-            return CreatedAtAction("Get", new { id = category.Id }, category);
+            return CreatedAtAction("Post", new { id = category.Id }, category); //change post to get once you establish get by id
         }
     }
 }
