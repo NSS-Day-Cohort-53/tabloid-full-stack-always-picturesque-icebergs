@@ -85,5 +85,57 @@ namespace Tabloid.Repositories
                 }
             };
         }
+
+        public Post GetPostByIdWithComments(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            SELECT p.Title as PostTitle, c.Id as CommentId, c.[Subject], c.Content, c.CreateDateTime, up.DisplayName
+                            FROM Post p
+                            LEFT JOIN Comment c ON p.Id = c.PostId
+                            JOIN UserProfile up ON c.UserProfileId = up.Id
+                            WHERE p.Id = @Id
+                            ORDER BY c.CreateDateTime DESC";
+
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        Post post = null;
+                        while (reader.Read())
+                        {
+                            if (post == null)
+                            {
+                                post = new Post()
+                                {
+                                    Id = id,
+                                    Title = DbUtils.GetString(reader, "PostTitle"),
+                                    Comments = new List<Comment>()
+                                };
+                            }
+                            if (DbUtils.IsNotDbNull(reader, "CommentId"))
+                            {
+                                post.Comments.Add(new Comment()
+                                {
+                                    Id = DbUtils.GetInt(reader, "CommentId"),
+                                    Subject = DbUtils.GetString(reader, "Subject"),
+                                    Content = DbUtils.GetString(reader, "Content"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                    UserDisplayName = DbUtils.GetString(reader, "DisplayName")
+                                });
+                            }
+                        }
+
+                        return post;
+                    }
+                }
+            }
+        }
     }
+
 }
