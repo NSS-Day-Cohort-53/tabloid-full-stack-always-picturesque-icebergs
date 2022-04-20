@@ -4,6 +4,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Hello from "./Hello";
 import PostList from "./Post/PostList";
+import PostDetails from "./Post/PostDetails";
 import { Tags } from "./TagView";
 import { AllCategories } from "./Categories";
 
@@ -17,6 +18,10 @@ export default function ApplicationViews({ isLoggedIn }) {
 
         <Route path="/feed" exact>
           {isLoggedIn ? <PostList /> : <Redirect to="/login" />}
+        </Route>
+
+        <Route path="/posts/:id">
+          {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
         </Route>
 
         <Route path="/login">
