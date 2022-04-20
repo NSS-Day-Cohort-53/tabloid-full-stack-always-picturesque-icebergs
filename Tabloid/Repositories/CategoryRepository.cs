@@ -56,5 +56,10 @@ namespace Tabloid.Repositories
             }
         }
 
+        public void DeleteCategory(Category category)
+        {
+
+        }
+
     }
 }
