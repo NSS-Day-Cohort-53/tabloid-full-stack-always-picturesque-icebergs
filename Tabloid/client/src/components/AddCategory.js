@@ -8,14 +8,11 @@ export const AddCategoryForm = () => {
     updateCategory({ Name: event.target.value });
   };
 
-  const submitCategory = () => {};
-
   return (
     <>
       <h1>Create new category</h1>
       <p>Enter a category name</p>
-      <input type="text" onChange={handleCategory}></input>
-      <button>Save</button>
+      <input />
     </>
   );
 };
