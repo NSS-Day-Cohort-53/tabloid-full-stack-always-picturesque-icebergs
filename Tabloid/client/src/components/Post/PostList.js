@@ -17,7 +17,7 @@ const PostList = () => {
         <>
             <h2>Feed</h2>
             <div className="container">
-                {posts.map(p => <Post post={p} key={p.id} />)}
+                {posts.map(p => <Post post={p} hasTitleLink={true} key={p.id} />)}
             </div>
         </>
     )
