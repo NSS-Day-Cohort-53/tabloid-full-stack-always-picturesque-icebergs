@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using Tabloid.Models;
 using Tabloid.Utils;
@@ -36,6 +37,26 @@ namespace Tabloid.Repositories
                     }
 
                 }
+            }
+
+            
+        }
+
+
+        public void Add(Tag tag)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @" INSERT Into Tag(Name)
+	                    values(@Name)";
+                    cmd.Parameters.AddWithValue("@name", tag.Name);
+
+                    tag.Id = (int)cmd.ExecuteScalar();
+                };
+                
             }
         }
     }
