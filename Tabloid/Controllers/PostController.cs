@@ -23,5 +23,16 @@ namespace Tabloid.Controllers
         {
             return Ok(_postRepo.GetAllPublishedPosts());
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var post = _postRepo.GetById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            return Ok(post);
+        }
     }
 }
