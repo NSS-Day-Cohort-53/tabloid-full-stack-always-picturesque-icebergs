@@ -5,16 +5,12 @@ import Post from "./Post";
 import { getPost } from "../../modules/postManager";
 
 const PostDetails = () => {
-    const [post, setPost] = useState();
+    const [post, setPost] = useState({});
     const { id } = useParams();
 
     useEffect(() => {
         getPost(id).then(post => setPost(post));
     }, [id]);
-
-    if (!post) {
-        return null;
-    }
 
     return (
         <div className="container">
