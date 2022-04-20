@@ -31,5 +31,12 @@ namespace Tabloid.Controllers
             _categoryRepo.AddCategory(category);
             return CreatedAtAction("Post", new { id = category.Id }, category); //change post to get once you establish get by id
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _categoryRepo.DeleteCategory(id);
+            return NoContent();
+        }
     }
 }

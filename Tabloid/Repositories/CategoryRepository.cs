@@ -56,9 +56,52 @@ namespace Tabloid.Repositories
             }
         }
 
-        public void DeleteCategory(Category category)
+        public void DeleteCategory(int id)
         {
+            using(var conn = Connection)
+            {
+                conn.Open();
 
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Category WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+
+
+            }
+        }
+
+        public Category GetCategoryById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT Id, Name FROM Category WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        Category category = new Category();
+
+                        if (reader.Read())
+                        {
+                            category = new Category()
+                            {
+                                Id = DbUtils.GetInt(reader, "Id"),
+                                Name = DbUtils.GetString(reader, "Name")
+                            };
+
+                           
+                        }
+                        return (category);
+                    }
+                }
+            }
         }
 
     }
