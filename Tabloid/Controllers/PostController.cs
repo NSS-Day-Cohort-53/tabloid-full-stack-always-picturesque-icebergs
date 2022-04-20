@@ -28,6 +28,16 @@ namespace Tabloid.Controllers
         public IActionResult GetWithComments(int id)
         {
             var post = _postRepo.GetPostByIdWithComments(id);
+        }
+        
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var post = _postRepo.GetById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
             return Ok(post);
         }
     }

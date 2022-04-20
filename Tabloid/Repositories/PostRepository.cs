@@ -50,6 +50,48 @@ namespace Tabloid.Repositories
             }
         }
 
+        public Post GetById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using(var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT p.Id, p.Title, p.Content,
+                               p.ImageLocation AS HeaderImage,
+                               p.CreateDateTime AS PostCreateDateTime,
+                               p.PublishDateTime, p.IsApproved,
+                               p.CategoryId, p.UserProfileId,
+
+                               u.FirstName, u.LastName, u.DisplayName,
+                               u.Email, u.CreateDateTime AS UserCreateDateTime, u.ImageLocation AS AvatarImage,
+                               u.UserTypeId,
+                           
+                               ut.[Name] AS UserTypeName
+                          FROM Post p
+                               LEFT JOIN UserProfile u ON p.UserProfileId = u.Id
+                               LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
+                         WHERE p.Id = @id";
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+
+                    var reader = cmd.ExecuteReader();
+
+                    Post post = null;
+
+                    if (reader.Read())
+                    {
+                        post = NewPostFromReader(reader);
+                    }
+
+                    reader.Close();
+
+                    return post;
+                }
+            }
+        }
+
         /// <summary>
         /// Helper function to retrieve a Post object from a reader.
         /// </summary>
