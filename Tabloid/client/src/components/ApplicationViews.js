@@ -8,6 +8,7 @@ import PostDetails from "./Post/PostDetails";
 import { Tags } from "./TagView";
 import { AllCategories } from "./Categories";
 import { Comments } from "./Comments/Comments";
+import { AddCategoryForm } from "./AddCategory";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -33,8 +34,12 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Login />
         </Route>
 
-        <Route path="/category">
+        <Route path="/category" exact>
           <AllCategories />
+        </Route>
+
+        <Route path="/category/new">
+          <AddCategoryForm />
         </Route>
 
         <Route path="/register">
