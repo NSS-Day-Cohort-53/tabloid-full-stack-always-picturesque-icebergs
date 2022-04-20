@@ -14,12 +14,7 @@ export const AddCategoryForm = () => {
     evt.preventDefault();
 
     const input = document.querySelector("#newCatInp").value;
-    if (
-      !input ||
-      input === "" ||
-      input.length == 0 ||
-      !input.replace(/\s/g, "").length
-    ) {
+    if (!input || !input.trim()) {
       alert("no empty values allowed");
     } else {
       addCategory(category).then(() => history.push("/category"));
