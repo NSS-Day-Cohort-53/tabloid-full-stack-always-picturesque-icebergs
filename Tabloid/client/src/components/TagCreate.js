@@ -19,13 +19,13 @@ export const CreateTag=()=>{
         tagCopy[key] = value;
         setTag(tagCopy);
 
-
+        
     
-    }
+    };
     const handleSave = (evt) => {
         evt.preventDefault();
        
-        addTag(tag).then((p) => {
+        addTag(tag).then(() => {
             // Navigate the user back to the home route
             history.push("/Tags");
         });
@@ -37,8 +37,8 @@ return (
     <>
     <form>
     <h4>create a tag</h4>
-    <input type="text" name="name"  onChange={handleInputChange}></input>
-    <button type="submit" value="Submit" onClick={handleSave}>Submit</button>
+    <input type="text" name="name" id="Name" onChange={handleInputChange}></input>
+    <button type="submit" value="Submit"  onClick={handleSave}>Submit</button>
     
     </form>
     <Link to="/Tags">head back</Link>

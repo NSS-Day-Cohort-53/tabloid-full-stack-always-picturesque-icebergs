@@ -3,15 +3,32 @@ const baseUrl = 'api/Tag';
 
 
 
-export const addTag = (tag) => {
-  return fetch(baseUrl,'/', {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(tag),
-  });
-};
+// export const addTag = (tag) => {
+//   return fetch(baseUrl, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`
+//     },
+//     body: JSON.stringify(tag),
+//   });
+// };
+
+export const addTag=(tag)=>
+{
+  return getToken().then((token)=>{
+return fetch(baseUrl, {
+      method: "POST",
+     headers: {
+       "Content-Type": "application/json",
+       Authorization: `Bearer ${token}`
+     },
+     body: JSON.stringify(tag),
+   });
+
+  })
+
+}
 
 
 export const getAllTags = () => {
