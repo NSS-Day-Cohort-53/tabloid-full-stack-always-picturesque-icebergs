@@ -60,10 +60,8 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Tags />
         </Route>
         <Route path="/tag/new">
-          <CreateTag/>
-          
-         </Route>
-
+          <CreateTag />
+        </Route>
       </Switch>
     </main>
   );

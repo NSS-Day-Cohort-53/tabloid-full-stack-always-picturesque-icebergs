@@ -66,7 +66,7 @@ namespace Tabloid.Repositories
                           FROM Post p
                          WHERE p.Id = @id
                       ORDER BY p.CreateDateTime DESC";
-                    DbUtils.AddParameter(cmd,"@id", id);
+                    DbUtils.AddParameter(cmd, "@id", id);
 
                     var reader = cmd.ExecuteReader();
 
@@ -89,7 +89,7 @@ namespace Tabloid.Repositories
             using (var conn = Connection)
             {
                 conn.Open();
-                using(var cmd = conn.CreateCommand())
+                using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                         SELECT p.Id, p.Title, p.Content,
@@ -173,7 +173,7 @@ namespace Tabloid.Repositories
                             SELECT p.Title as PostTitle, c.Id as CommentId, c.[Subject], c.Content, c.CreateDateTime, up.DisplayName
                             FROM Post p
                             LEFT JOIN Comment c ON p.Id = c.PostId
-                            JOIN UserProfile up ON c.UserProfileId = up.Id
+                            LEFT JOIN UserProfile up ON c.UserProfileId = up.Id
                             WHERE p.Id = @Id
                             ORDER BY c.CreateDateTime DESC";
 
