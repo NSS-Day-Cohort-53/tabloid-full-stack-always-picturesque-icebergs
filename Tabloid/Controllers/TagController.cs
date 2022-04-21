@@ -42,5 +42,12 @@ namespace Tabloid.Controllers
             }
             return Ok(tag);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _tagRepository.Delete(id);
+            return NoContent();
+        }
     }
 }
