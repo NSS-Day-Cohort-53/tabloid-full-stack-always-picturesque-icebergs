@@ -53,7 +53,9 @@ export default function ApplicationViews({ isLoggedIn }) {
         <Route path="/tag/new">
           <CreateTag/>
          </Route>
-       
+         <Route  path="/tag/delete/:id">
+          <DeleteTag/>
+         </Route>
       </Switch>
     </main>
   );

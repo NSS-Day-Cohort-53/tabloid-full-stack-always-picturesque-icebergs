@@ -22,9 +22,8 @@ export const Tags=()=>{
         <>
         <div>
             <h2>Tags:</h2>
-           {tags.map(t=>
-            <h4 key={t.id}> {t.name}</h4> 
-
+           {tags?.map(t=>
+            <><h4 key={t.id}> {t.name}</h4><Link to={`/tag/delete/${t.id}`}> Delete</Link></>
 
             
             )
