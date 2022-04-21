@@ -162,7 +162,6 @@ namespace Tabloid.Repositories
             };
         }
 
-<<<<<<< HEAD
         public Post GetPostByIdWithComments(int id)
         {
             using (var conn = Connection)
@@ -212,7 +211,6 @@ namespace Tabloid.Repositories
                     }
                 }
             }
-=======
         /// <summary>
         /// Helper function to retrieve a Post object without User from a reader.
         /// </summary>
@@ -231,7 +229,6 @@ namespace Tabloid.Repositories
                 CategoryId = DbUtils.GetInt(reader, "CategoryId"),
                 UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
             };
->>>>>>> main
         }
     }
 
