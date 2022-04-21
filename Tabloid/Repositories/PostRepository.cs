@@ -139,7 +139,7 @@ namespace Tabloid.Repositories
                             SELECT p.Title as PostTitle, c.Id as CommentId, c.[Subject], c.Content, c.CreateDateTime, up.DisplayName
                             FROM Post p
                             LEFT JOIN Comment c ON p.Id = c.PostId
-                            JOIN UserProfile up ON c.UserProfileId = up.Id
+                            LEFT JOIN UserProfile up ON c.UserProfileId = up.Id
                             WHERE p.Id = @Id
                             ORDER BY c.CreateDateTime DESC";
 

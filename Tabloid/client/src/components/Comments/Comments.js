@@ -16,18 +16,22 @@ export const Comments = () => {
     <>
       <h2>{postWithComments.title}</h2>
       <div>
-        <ListGroup>
-          {postWithComments.comments?.map((c) => {
-            return (
-              <ListGroupItem>
-                {c.subject} {c.content}{" "}
-                <b>
-                  Created by {c.userDisplayName} on {c.createDateTime}
-                </b>
-              </ListGroupItem>
-            );
-          })}
-        </ListGroup>
+        {postWithComments?.comments.length ? (
+          <ListGroup>
+            {postWithComments.comments?.map((c) => {
+              return (
+                <ListGroupItem>
+                  {c.subject} {c.content}{" "}
+                  <b>
+                    Created by {c.userDisplayName} on {c.createDateTime}
+                  </b>
+                </ListGroupItem>
+              );
+            })}
+          </ListGroup>
+        ) : (
+          <div>There are no comments for this post</div>
+        )}
       </div>
       <div>
         <Link to={`/posts/${postWithComments.id}`}>
