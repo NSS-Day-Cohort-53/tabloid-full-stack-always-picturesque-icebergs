@@ -5,6 +5,7 @@ import Register from "./Register";
 import Hello from "./Hello";
 import PostList from "./Post/PostList";
 import PostDetails from "./Post/PostDetails";
+import MyPosts from "./Post/MyPosts";
 import { Tags } from "./TagView";
 import { CreateTag } from "./TagCreate";
 import { DeleteTag } from "./TagDelete";
@@ -25,6 +26,10 @@ export default function ApplicationViews({ isLoggedIn }) {
 
         <Route path="/posts/:id">
           {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+        </Route>
+
+        <Route path="/myposts">
+          {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}
         </Route>
 
         <Route path="/login">
