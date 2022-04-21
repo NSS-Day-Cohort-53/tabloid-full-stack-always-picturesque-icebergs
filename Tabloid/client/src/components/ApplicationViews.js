@@ -10,6 +10,7 @@ import { Tags } from "./TagView";
 import { CreateTag } from "./TagCreate";
 import { DeleteTag } from "./TagDelete";
 import { AllCategories } from "./Categories";
+import { Comments } from "./Comments/Comments";
 import { AddCategoryForm } from "./AddCategory";
 
 export default function ApplicationViews({ isLoggedIn }) {
@@ -26,6 +27,10 @@ export default function ApplicationViews({ isLoggedIn }) {
 
         <Route path="/posts/:id">
           {isLoggedIn ? <PostDetails /> : <Redirect to="/login" />}
+        </Route>
+
+        <Route path="/comments/:id">
+          {isLoggedIn ? <Comments /> : <Redirect to="/login" />}
         </Route>
 
         <Route path="/myposts">
