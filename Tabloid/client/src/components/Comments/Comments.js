@@ -2,9 +2,10 @@ import { getPostWithComments } from "../../modules/postManager";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { ListGroup, ListGroupItem } from "reactstrap";
 
 export const Comments = () => {
-  const [postWithComments, setPostWithComments] = useState([]);
+  const [postWithComments, setPostWithComments] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
@@ -13,15 +14,20 @@ export const Comments = () => {
 
   return (
     <>
-      <h1>{postWithComments.Title}</h1>
+      <h2>{postWithComments.title}</h2>
       <div>
-        <ul>
-          {postWithComments.Comments.map((c) => {
+        <ListGroup>
+          {postWithComments.comments?.map((c) => {
             return (
-              <li>{`${c.Subject}  ${c.Content}  Created by ${c.UserDisplayName} ${c.CreateDateTime}`}</li>
+              <ListGroupItem>
+                {c.subject} {c.content}{" "}
+                <b>
+                  Created by {c.userDisplayName} on {c.createDateTime}
+                </b>
+              </ListGroupItem>
             );
           })}
-        </ul>
+        </ListGroup>
       </div>
       <div>
         <Link to={`/posts/${postWithComments.id}`}>
