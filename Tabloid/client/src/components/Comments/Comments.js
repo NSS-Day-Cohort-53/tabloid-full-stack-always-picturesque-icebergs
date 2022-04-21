@@ -12,8 +12,6 @@ export const Comments = () => {
     getPostWithComments(id).then((pwc) => setPostWithComments(pwc));
   }, [id]);
 
-  console.log(postWithComments);
-
   return (
     <>
       <h2>{postWithComments.title}</h2>
@@ -22,7 +20,7 @@ export const Comments = () => {
           <ListGroup>
             {postWithComments.comments?.map((c) => {
               return (
-                <ListGroupItem>
+                <ListGroupItem key={c.id}>
                   {c.subject} {c.content}{" "}
                   <b>
                     Created by {c.userDisplayName} on {c.createDateTime}
