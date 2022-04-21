@@ -3,6 +3,7 @@ import { addTag } from '../modules/TagManagment';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
+
 export const CreateTag=()=>{
     const history = useHistory();
     const TagForm={
@@ -16,16 +17,27 @@ export const CreateTag=()=>{
         const tagCopy = { ...tag };
         tagCopy[key] = value;
         setTag(tagCopy);
+       
+        
     };
     const handleSave = (evt) => {
         evt.preventDefault();
+        if (!tag.Name.length||!tag.Name.trim()){
+            window.alert("please enter a value")
+
+        }
+        
+        else{
+            addTag(tag).then(() => {
+                history.push("/tag");
+            });
+        }
+
+        
        
-        addTag(tag).then(() => {
-            // Navigate the user back to the home route
-            history.push("/Tags");
-        });
+       
     }
-    
+   
 return (
     <>
     <form>
@@ -33,7 +45,7 @@ return (
     <input type="text" name="name" id="Name" onChange={handleInputChange}></input>
     <button type="submit" value="Submit"  onClick={handleSave}>Submit</button>
     </form>
-    <Link to="/Tags">head back</Link>
+    <Link to="/tag">head back</Link>
 
     </>
 )

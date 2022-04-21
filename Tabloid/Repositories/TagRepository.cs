@@ -52,7 +52,7 @@ namespace Tabloid.Repositories
                 {
                     cmd.CommandText = @" INSERT Into Tag(Name)
 	                   OUTPUT INSERTED.ID values(@Name)";
-                    cmd.Parameters.AddWithValue("@name", tag.Name);
+                    DbUtils.AddParameter(cmd,"@name", tag.Name);
 
                     tag.Id = (int)cmd.ExecuteScalar();
                 };
@@ -63,7 +63,7 @@ namespace Tabloid.Repositories
 
 
 
-        public Tag getTagById(int id)
+        public Tag GetTagById(int id)
         {
             using (var conn = Connection)
             {

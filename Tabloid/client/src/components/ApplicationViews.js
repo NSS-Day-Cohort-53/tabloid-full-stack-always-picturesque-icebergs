@@ -41,10 +41,10 @@ export default function ApplicationViews({ isLoggedIn }) {
         <Route path="/register">
           <Register />
         </Route>
-        <Route path="/Tags">
+        <Route path="/tag" exact>
           <Tags />
         </Route>
-        <Route path="/CreateTag">
+        <Route path="/tag/new">
           <CreateTag/>
           
          </Route>

@@ -1,5 +1,5 @@
 import { getToken } from "./authManager";
-const baseUrl = 'api/Tag';
+const baseUrl = '/api/Tag';
 
 
 export const addTag=(tag)=>
@@ -12,7 +12,7 @@ return fetch(baseUrl, {
        Authorization: `Bearer ${token}`
      },
      body: JSON.stringify(tag),
-   });
+   })
 
   })
 

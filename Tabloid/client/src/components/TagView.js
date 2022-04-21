@@ -26,7 +26,7 @@ export const Tags=()=>{
             <h4 key={t.id}> {t.name}</h4> 
             )} 
 
-          <Link to="/CreateTag">Create a tag</Link>
+          <Link to="/tag/new">Create a tag</Link>
         </div>
         </>
 
