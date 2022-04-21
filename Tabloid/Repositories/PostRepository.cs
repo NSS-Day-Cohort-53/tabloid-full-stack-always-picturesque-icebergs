@@ -66,7 +66,7 @@ namespace Tabloid.Repositories
                           FROM Post p
                          WHERE p.Id = @id
                       ORDER BY p.CreateDateTime DESC";
-                    DbUtils.AddParameter(cmd,"@id", id);
+                    DbUtils.AddParameter(cmd, "@id", id);
 
                     var reader = cmd.ExecuteReader();
 
@@ -89,7 +89,7 @@ namespace Tabloid.Repositories
             using (var conn = Connection)
             {
                 conn.Open();
-                using(var cmd = conn.CreateCommand())
+                using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                         SELECT p.Id, p.Title, p.Content,
@@ -162,11 +162,61 @@ namespace Tabloid.Repositories
             };
         }
 
-        /// <summary>
-        /// Helper function to retrieve a Post object without User from a reader.
-        /// </summary>
-        /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
-        /// <returns>A Post object found in the data from the Reader</returns>
+        public Post GetPostByIdWithComments(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            SELECT p.Title as PostTitle, c.Id as CommentId, c.[Subject], c.Content, c.CreateDateTime, up.DisplayName
+                            FROM Post p
+                            LEFT JOIN Comment c ON p.Id = c.PostId
+                            LEFT JOIN UserProfile up ON c.UserProfileId = up.Id
+                            WHERE p.Id = @Id
+                            ORDER BY c.CreateDateTime DESC";
+
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        Post post = null;
+                        while (reader.Read())
+                        {
+                            if (post == null)
+                            {
+                                post = new Post()
+                                {
+                                    Id = id,
+                                    Title = DbUtils.GetString(reader, "PostTitle"),
+                                    Comments = new List<Comment>()
+                                };
+                            }
+                            if (DbUtils.IsNotDbNull(reader, "CommentId"))
+                            {
+                                post.Comments.Add(new Comment()
+                                {
+                                    Id = DbUtils.GetInt(reader, "CommentId"),
+                                    Subject = DbUtils.GetString(reader, "Subject"),
+                                    Content = DbUtils.GetString(reader, "Content"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                    UserDisplayName = DbUtils.GetString(reader, "DisplayName")
+                                });
+                            }
+                        }
+
+                        return post;
+                    }
+                }
+            }
+        }
+            /// <summary>
+            /// Helper function to retrieve a Post object without User from a reader.
+            /// </summary>
+            /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
+            /// <returns>A Post object found in the data from the Reader</returns>
         private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
@@ -181,5 +231,6 @@ namespace Tabloid.Repositories
                 UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
             };
         }
+
     }
 }
