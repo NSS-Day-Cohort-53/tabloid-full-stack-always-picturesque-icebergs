@@ -27,7 +27,9 @@ const _saveUser = (userProfile) => {
 
 
 
-export const getToken = () => firebase.auth().currentUser.getIdToken();
+export const getToken = () => {
+  return firebase.auth().currentUser.getIdToken();
+}
 
 
 export const login = (email, pw) => {

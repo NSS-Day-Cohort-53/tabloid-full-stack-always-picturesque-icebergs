@@ -4,6 +4,7 @@ using Tabloid.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Security.Claims;
 
 namespace Tabloid.Controllers
 {
@@ -13,10 +14,12 @@ namespace Tabloid.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostRepository _postRepo;
+        private readonly IUserProfileRepository _userProfileRepo;
 
-        public PostController(IPostRepository postRepository)
+        public PostController(IPostRepository postRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepo = postRepository;
+            _userProfileRepo = userProfileRepository;
         }
 
         [HttpGet]
@@ -61,6 +64,30 @@ namespace Tabloid.Controllers
             _postRepo.Add(post);
 
             return CreatedAtAction("Get", new { id = post.Id }, post);
+        }
+        
+        [HttpGet("PostsByUser/{id}")]
+        public IActionResult GetPostsByUser(int id)
+        {
+            return Ok(_postRepo.GetAllPostsByUser(id));
+        }
+
+        [HttpGet("MyPosts")]
+        public IActionResult GetPostsByCurrentUser()
+        {
+            var profile = GetCurrentUserProfile();
+            if (profile == null)
+            { 
+                return NotFound();
+            }
+            return Ok(_postRepo.GetAllPostsByUser(profile.Id));
+        }
+
+        //Function for grabbing the current user for use in certain end points
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }
