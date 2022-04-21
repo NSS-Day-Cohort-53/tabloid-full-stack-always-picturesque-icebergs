@@ -36,11 +36,12 @@ export const getAllTags = () => {
   });
 };
 
-export const DeleteTag=()=>
+export const DeleteTags=(id)=>
 {
     return getToken().then((token)=>
     {
-      return fetch (baseUrl,
+      console.log(id)
+      return fetch (`${baseUrl}/${id}`,
       {
         method:"Delete",
         headers: {
@@ -48,7 +49,7 @@ export const DeleteTag=()=>
         }
       }).then(resp=>{
         if (resp.ok) {
-          return resp.json();
+         
         } else {
           throw new Error("An unknown error occurred while trying to get the tags.");
         }

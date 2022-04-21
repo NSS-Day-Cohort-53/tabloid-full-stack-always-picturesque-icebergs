@@ -6,7 +6,7 @@ import { DeleteTags } from '../modules/TagManagment';
 
 export const DeleteTag=()=>
 {
-    
+    const history = useHistory();
 
     const [tag,setTags]=useState({})
     const {id} =useParams()
@@ -16,10 +16,25 @@ export const DeleteTag=()=>
     });
   }, []);
 
-  if (!tag) {
-    return null;
-  }
-    
+
+    const DeleteButton=(evt)=>{
+        
+        evt.preventDefault();
+       
+        DeleteTags(id).then((tag)=>{
+            setTags(tag)
+            history.push("/tag");
+        })
+
+        
+          
+           
+      
+       
+          
+       
+
+    }
     
     
     
@@ -27,9 +42,10 @@ export const DeleteTag=()=>
         <>
         <h2>Delete a tag</h2>
         <h3>Are you sure you want to delete?</h3>
-        <h1>{tag.id}</h1>
-        <h3>{tag.name}</h3>
-        <button> delete</button>
+        
+        <h3  key={tag?.id}>{tag?.name}</h3>
+        <button onClick={DeleteButton}> delete</button>
+        <Link to="/tag">Cancel</Link>
         </>
     )
 }
