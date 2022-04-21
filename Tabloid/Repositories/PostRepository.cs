@@ -66,7 +66,7 @@ namespace Tabloid.Repositories
                           FROM Post p
                          WHERE p.Id = @id
                       ORDER BY p.CreateDateTime DESC";
-                    DbUtils.AddParameter(cmd,"@id", id);
+                    DbUtils.AddParameter(cmd, "@id", id);
 
                     var reader = cmd.ExecuteReader();
 
@@ -89,7 +89,7 @@ namespace Tabloid.Repositories
             using (var conn = Connection)
             {
                 conn.Open();
-                using(var cmd = conn.CreateCommand())
+                using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                         SELECT p.Id, p.Title, p.Content,
@@ -211,11 +211,12 @@ namespace Tabloid.Repositories
                     }
                 }
             }
-        /// <summary>
-        /// Helper function to retrieve a Post object without User from a reader.
-        /// </summary>
-        /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
-        /// <returns>A Post object found in the data from the Reader</returns>
+            /// <summary>
+            /// Helper function to retrieve a Post object without User from a reader.
+            /// </summary>
+            /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
+            /// <returns>A Post object found in the data from the Reader</returns>
+        }
         private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
@@ -230,6 +231,6 @@ namespace Tabloid.Repositories
                 UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
             };
         }
-    }
 
+    }
 }
