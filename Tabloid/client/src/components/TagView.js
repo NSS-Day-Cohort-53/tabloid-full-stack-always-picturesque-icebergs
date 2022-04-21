@@ -1,6 +1,8 @@
 import { getAllTags } from '../modules/TagManagment';
 import React, { useEffect, useState  } from 'react';
 
+import { Link } from 'react-router-dom';
+
 
 export const Tags=()=>{
   
@@ -21,10 +23,14 @@ export const Tags=()=>{
         <div>
             <h2>Tags:</h2>
            {tags.map(t=>
-            <h4 id={t.id}> {t.name}</h4> 
+            <h4 key={t.id}> {t.name}</h4> 
             )} 
+
+          <Link to="/tag/new">Create a tag</Link>
         </div>
         </>
+
+
     )
 }
 

@@ -40,7 +40,7 @@ export default function Header({ isLoggedIn }) {
                 </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={RRNavLink} to="/Tags" >Tag Managment</NavLink>
+                <NavLink tag={RRNavLink} to="/Tag" >Tag Managment</NavLink>
               </NavItem>
              </>
             )}
