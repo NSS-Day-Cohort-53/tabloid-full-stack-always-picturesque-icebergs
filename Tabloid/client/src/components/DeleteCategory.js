@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
 import { deleteCategory } from "../modules/CategoryManager";
-import { getAllCategories } from "../modules/CategoryManager";
+import { getCategoryById } from "../modules/CategoryManager";
 import { useParams } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export const DeleteCategoryForm = () => {
-  const [categories, updateCategories] = useState([]);
+  const [category, updateCategory] = useState({});
 
+  const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
-    getAllCategories().then((categories) => updateCategories(categories));
+    getCategoryById(id).then((res) => updateCategory(res));
   }, []);
+
+  const delCat = (evt) => {
+    evt.preventDefault();
+    deleteCategory(category?.id).then(() => history.push("/category"));
+  };
 
   return (
     <>
       <h1>Are you sure you want to delete?</h1>
-      <h2>{`category name: ${id}`}</h2>
-      <h2>{id}</h2>
+      <h2>cat: {category.name}</h2>
+      <button onClick={delCat}>DELETE</button>
+      <Link to={`/category`}>Cancel</Link>
     </>
   );
 };

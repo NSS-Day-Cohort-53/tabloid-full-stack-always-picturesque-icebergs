@@ -46,14 +46,13 @@ export const addCategory = (category) => {
 
 export const deleteCategory = (categoryId) => {
   return getToken().then((token) => {
-    return fetch(`baseUrl/${categoryId}`, {
+    return fetch(`${baseUrl}/${categoryId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }).then((resp) => {
       if (resp.ok) {
-        return resp.json();
       } else if (resp.status === 401) {
         throw new Error("Unauthorized");
       } else {
@@ -67,7 +66,7 @@ export const deleteCategory = (categoryId) => {
 
 export const getCategoryById = (id) => {
   return getToken().then((token) => {
-    return fetch(`baseUrl/${id}`, {
+    return fetch(`${baseUrl}/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
