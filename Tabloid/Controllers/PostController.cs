@@ -49,8 +49,7 @@ namespace Tabloid.Controllers
         [HttpPost]
         public IActionResult Post(Post post)
         {
-            //NOTE: This is only temporary until I merge in the get current user function.
-            post.UserProfileId = 1;
+            post.UserProfileId = GetCurrentUserProfile().Id;
 
             post.CreateDateTime = DateTime.Now;
 

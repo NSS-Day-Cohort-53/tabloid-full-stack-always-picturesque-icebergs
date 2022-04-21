@@ -237,6 +237,7 @@ namespace Tabloid.Repositories
                     post.Id = (int)cmd.ExecuteScalar();
                 }
             }
+        }
         /// <summary>
         /// Helper function to retrieve a Post object without User from a reader.
         /// </summary>
