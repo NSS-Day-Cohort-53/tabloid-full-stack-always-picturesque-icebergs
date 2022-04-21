@@ -5,6 +5,7 @@ import Register from "./Register";
 import Hello from "./Hello";
 import PostList from "./Post/PostList";
 import PostDetails from "./Post/PostDetails";
+import MyPosts from "./Post/MyPosts";
 import { Tags } from "./TagView";
 import { CreateTag } from "./TagCreate";
 import { AllCategories } from "./Categories";
@@ -31,6 +32,10 @@ export default function ApplicationViews({ isLoggedIn }) {
           {isLoggedIn ? <Comments /> : <Redirect to="/login" />}
         </Route>
 
+        <Route path="/myposts">
+          {isLoggedIn ? <MyPosts /> : <Redirect to="/login" />}
+        </Route>
+
         <Route path="/login">
           <Login />
         </Route>
@@ -50,10 +55,8 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Tags />
         </Route>
         <Route path="/tag/new">
-          <CreateTag/>
-          
-         </Route>
-
+          <CreateTag />
+        </Route>
       </Switch>
     </main>
   );
