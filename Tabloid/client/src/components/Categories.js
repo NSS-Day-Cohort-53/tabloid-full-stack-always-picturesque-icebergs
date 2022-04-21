@@ -1,6 +1,7 @@
 import { getAllCategories } from "../modules/CategoryManager";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const AllCategories = () => {
   const [categories, updateCategories] = useState([]);
@@ -18,11 +19,15 @@ export const AllCategories = () => {
   return (
     <>
       <h1>Categories: </h1>
-      <ul>
-        {categories.map((c) => {
-          return <li>{c.name}</li>;
-        })}
-      </ul>
+      {categories.map((c) => {
+        return (
+          <div>
+            <p>
+              {c.name} |<Link to={`category/delete/${c.id}`}> DELETE</Link>
+            </p>
+          </div>
+        );
+      })}
       <button onClick={goToNewCategory}>Add Category</button>
     </>
   );
