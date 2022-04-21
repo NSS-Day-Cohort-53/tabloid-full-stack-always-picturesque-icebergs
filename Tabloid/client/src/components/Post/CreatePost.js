@@ -19,9 +19,13 @@ const CreatePost = () => {
 
     const handleUserInput = (event) => {
         const target = event.target;
-        const value = target.value;
+        let value = target.value;
         const name = target.name;
         const copy = {...post};
+        //conver categoryId to an int
+        if (name === "categoryId") {
+            value = parseInt(value);
+        }
         copy[name] = value;
         setPost(copy);
     }
@@ -36,8 +40,13 @@ const CreatePost = () => {
                 <FormGroup>
                     <Label for="categoryId">Category</Label>
                     <Input type="select" id="categoryId" name="categoryId" onChange={handleUserInput}>
+                        <option value="">Select a Category</option>
                         {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </Input>
+                </FormGroup>
+                <FormGroup>
+                    <Label for="publishDateTime">Publish Date</Label> 
+                    <Input type="datetime" id="publishDateTime" name="publishDateTime" onChange={handleUserInput} />
                 </FormGroup>
             </fieldset>
         </Form>
