@@ -38,13 +38,13 @@ namespace Tabloid.Controllers
             return Ok(post);
         }
 
-        [HttpGet("GetPostsByUser/{id}")]
+        [HttpGet("PostsByUser/{id}")]
         public IActionResult GetPostsByUser(int id)
         {
             return Ok(_postRepo.GetAllPostsByUser(id));
         }
 
-        [HttpGet("GetPostsByCurrentUser")]
+        [HttpGet("MyPosts")]
         public IActionResult GetPostsByCurrentUser()
         {
             var profile = GetCurrentUserProfile();

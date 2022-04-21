@@ -37,7 +37,7 @@ export const getPost = (id) => {
 
 export const getAllPostsFromCurrentUser = () => {
     return getToken().then(token => {
-        return fetch(`${baseUrl}/GetPostsByCurrentUser`, {
+        return fetch(`${baseUrl}/MyPosts`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -46,7 +46,7 @@ export const getAllPostsFromCurrentUser = () => {
             if (res.ok) {
                 return res.json();
             } else {
-                throw new Error("An unkown erro occurred whilte trying to get posts.");
+                throw new Error("An unkown error occurred whilte trying to get posts.");
             }
         });
     });

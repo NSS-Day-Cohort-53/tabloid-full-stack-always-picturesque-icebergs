@@ -40,7 +40,7 @@ namespace Tabloid.Repositories
 
                     while (reader.Read())
                     {
-                        posts.Add(NewPostFromReader(reader));
+                        posts.Add(NewPostWithUserFromReader(reader));
                     }
 
                     reader.Close();
@@ -62,16 +62,8 @@ namespace Tabloid.Repositories
                                p.ImageLocation AS HeaderImage,
                                p.CreateDateTime AS PostCreateDateTime,
                                p.PublishDateTime, p.IsApproved,
-                               p.CategoryId, p.UserProfileId,
-
-                               u.FirstName, u.LastName, u.DisplayName,
-                               u.Email, u.CreateDateTime AS UserCreateDateTime, u.ImageLocation AS AvatarImage,
-                               u.UserTypeId,
-                           
-                               ut.[Name] AS UserTypeName
+                               p.CategoryId, p.UserProfileId
                           FROM Post p
-                               LEFT JOIN UserProfile u ON p.UserProfileId = u.Id
-                               LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
                          WHERE p.Id = @id
                       ORDER BY p.CreateDateTime DESC";
                     DbUtils.AddParameter(cmd,"@id", id);
@@ -124,7 +116,7 @@ namespace Tabloid.Repositories
 
                     if (reader.Read())
                     {
-                        post = NewPostFromReader(reader);
+                        post = NewPostWithUserFromReader(reader);
                     }
 
                     reader.Close();
@@ -135,11 +127,11 @@ namespace Tabloid.Repositories
         }
 
         /// <summary>
-        /// Helper function to retrieve a Post object from a reader.
+        /// Helper function to retrieve a Post object with User from a reader.
         /// </summary>
         /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
         /// <returns>A Post object found in the data from the Reader</returns>
-        private Post NewPostFromReader(SqlDataReader reader)
+        private Post NewPostWithUserFromReader(SqlDataReader reader)
         {
             return new Post()
             {
@@ -167,6 +159,26 @@ namespace Tabloid.Repositories
                         Name = DbUtils.GetString(reader, "UserTypeName")
                     }
                 }
+            };
+        }
+
+        /// <summary>
+        /// Helper function to retrieve a Post object without User from a reader.
+        /// </summary>
+        /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
+        /// <returns>A Post object found in the data from the Reader</returns>
+        private Post NewPostFromReader(SqlDataReader reader)
+        {
+            return new Post()
+            {
+                Id = DbUtils.GetInt(reader, "Id"),
+                Title = DbUtils.GetString(reader, "Title"),
+                Content = DbUtils.GetString(reader, "Content"),
+                ImageLocation = DbUtils.GetNullableString(reader, "HeaderImage"),
+                CreateDateTime = DbUtils.GetDateTime(reader, "PostCreateDateTime"),
+                PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
+                CategoryId = DbUtils.GetInt(reader, "CategoryId"),
+                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
             };
         }
     }
