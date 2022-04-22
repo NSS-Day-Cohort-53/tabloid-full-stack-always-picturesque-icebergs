@@ -25,11 +25,24 @@ namespace Tabloid.Controllers
             return Ok(_categoryRepo.GetAll());
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            return Ok(_categoryRepo.GetCategoryById(id));
+        }
+
         [HttpPost]
         public IActionResult Post (Category category)
         {
             _categoryRepo.AddCategory(category);
             return CreatedAtAction("Post", new { id = category.Id }, category); //change post to get once you establish get by id
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _categoryRepo.DeleteCategory(id);
+            return NoContent();
         }
     }
 }

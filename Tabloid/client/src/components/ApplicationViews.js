@@ -14,6 +14,7 @@ import { DeleteTag } from "./TagDelete";
 import { AllCategories } from "./Categories";
 import { Comments } from "./Comments/Comments";
 import { AddCategoryForm } from "./AddCategory";
+import { DeleteCategoryForm } from "./DeleteCategory";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -57,6 +58,10 @@ export default function ApplicationViews({ isLoggedIn }) {
 
         <Route path="/category/new">
           <AddCategoryForm />
+        </Route>
+
+        <Route path="/category/delete/:id">
+          <DeleteCategoryForm />
         </Route>
 
         <Route path="/register">
