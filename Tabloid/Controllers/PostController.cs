@@ -3,6 +3,7 @@ using Tabloid.Repositories;
 using Tabloid.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Security.Claims;
 
 namespace Tabloid.Controllers
@@ -45,6 +46,25 @@ namespace Tabloid.Controllers
             return Ok(post);
         }
 
+        [HttpPost]
+        public IActionResult Post(Post post)
+        {
+            post.UserProfileId = GetCurrentUserProfile().Id;
+
+            post.CreateDateTime = DateTime.Now;
+
+            post.IsApproved = true;
+
+            if (string.IsNullOrWhiteSpace(post.ImageLocation))
+            {
+                post.ImageLocation = null;
+            }
+
+            _postRepo.Add(post);
+
+            return CreatedAtAction("Get", new { id = post.Id }, post);
+        }
+        
         [HttpGet("PostsByUser/{id}")]
         public IActionResult GetPostsByUser(int id)
         {

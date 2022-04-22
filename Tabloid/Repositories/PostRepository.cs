@@ -212,11 +212,37 @@ namespace Tabloid.Repositories
                 }
             }
         }
-            /// <summary>
-            /// Helper function to retrieve a Post object without User from a reader.
-            /// </summary>
-            /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
-            /// <returns>A Post object found in the data from the Reader</returns>
+
+        public void Add(Post post)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Post (Title, Content, ImageLocation, CreateDateTime, PublishDateTime, IsApproved, CategoryId, UserProfileId)
+                        OUTPUT INSERTED.ID
+                        VALUES (@title, @content, @imageLocation, @createDateTime, @publishDateTime, @isApproved, @categoryId, @userProfileId)";
+
+                    DbUtils.AddParameter(cmd, "@title", post.Title);
+                    DbUtils.AddParameter(cmd, "@content", post.Content);
+                    DbUtils.AddParameter(cmd, "@imageLocation", post.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@createDateTime", post.CreateDateTime);
+                    DbUtils.AddParameter(cmd, "@publishDateTime", post.PublishDateTime);
+                    DbUtils.AddParameter(cmd, "@isApproved", post.IsApproved);
+                    DbUtils.AddParameter(cmd, "@categoryId", post.CategoryId);
+                    DbUtils.AddParameter(cmd, "@userProfileId", post.UserProfileId);
+
+                    post.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+        /// <summary>
+        /// Helper function to retrieve a Post object without User from a reader.
+        /// </summary>
+        /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
+        /// <returns>A Post object found in the data from the Reader</returns>
         private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
@@ -231,6 +257,5 @@ namespace Tabloid.Repositories
                 UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
             };
         }
-
     }
 }
