@@ -40,6 +40,40 @@ namespace Tabloid.Repositories
 
                     while (reader.Read())
                     {
+                        posts.Add(NewPostWithUserFromReader(reader));
+                    }
+
+                    reader.Close();
+
+                    return posts;
+                }
+            }
+        }
+
+        public List<Post> GetAllPostsByUser(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT p.Id, p.Title, p.Content,
+                               p.ImageLocation AS HeaderImage,
+                               p.CreateDateTime AS PostCreateDateTime,
+                               p.PublishDateTime, p.IsApproved,
+                               p.CategoryId, p.UserProfileId
+                          FROM Post p
+                         WHERE p.Id = @id
+                      ORDER BY p.CreateDateTime DESC";
+                    DbUtils.AddParameter(cmd, "@id", id);
+
+                    var reader = cmd.ExecuteReader();
+
+                    var posts = new List<Post>();
+
+                    while (reader.Read())
+                    {
                         posts.Add(NewPostFromReader(reader));
                     }
 
@@ -55,7 +89,7 @@ namespace Tabloid.Repositories
             using (var conn = Connection)
             {
                 conn.Open();
-                using(var cmd = conn.CreateCommand())
+                using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
                         SELECT p.Id, p.Title, p.Content,
@@ -82,7 +116,7 @@ namespace Tabloid.Repositories
 
                     if (reader.Read())
                     {
-                        post = NewPostFromReader(reader);
+                        post = NewPostWithUserFromReader(reader);
                     }
 
                     reader.Close();
@@ -127,11 +161,11 @@ namespace Tabloid.Repositories
         }
 
         /// <summary>
-        /// Helper function to retrieve a Post object from a reader.
+        /// Helper function to retrieve a Post object with User from a reader.
         /// </summary>
         /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
         /// <returns>A Post object found in the data from the Reader</returns>
-        private Post NewPostFromReader(SqlDataReader reader)
+        private Post NewPostWithUserFromReader(SqlDataReader reader)
         {
             return new Post()
             {
@@ -159,6 +193,102 @@ namespace Tabloid.Repositories
                         Name = DbUtils.GetString(reader, "UserTypeName")
                     }
                 }
+            };
+        }
+
+        public Post GetPostByIdWithComments(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            SELECT p.Title as PostTitle, c.Id as CommentId, c.[Subject], c.Content, c.CreateDateTime, up.DisplayName
+                            FROM Post p
+                            LEFT JOIN Comment c ON p.Id = c.PostId
+                            LEFT JOIN UserProfile up ON c.UserProfileId = up.Id
+                            WHERE p.Id = @Id
+                            ORDER BY c.CreateDateTime DESC";
+
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        Post post = null;
+                        while (reader.Read())
+                        {
+                            if (post == null)
+                            {
+                                post = new Post()
+                                {
+                                    Id = id,
+                                    Title = DbUtils.GetString(reader, "PostTitle"),
+                                    Comments = new List<Comment>()
+                                };
+                            }
+                            if (DbUtils.IsNotDbNull(reader, "CommentId"))
+                            {
+                                post.Comments.Add(new Comment()
+                                {
+                                    Id = DbUtils.GetInt(reader, "CommentId"),
+                                    Subject = DbUtils.GetString(reader, "Subject"),
+                                    Content = DbUtils.GetString(reader, "Content"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                    UserDisplayName = DbUtils.GetString(reader, "DisplayName")
+                                });
+                            }
+                        }
+
+                        return post;
+                    }
+                }
+            }
+        }
+
+        public void Add(Post post)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Post (Title, Content, ImageLocation, CreateDateTime, PublishDateTime, IsApproved, CategoryId, UserProfileId)
+                        OUTPUT INSERTED.ID
+                        VALUES (@title, @content, @imageLocation, @createDateTime, @publishDateTime, @isApproved, @categoryId, @userProfileId)";
+
+                    DbUtils.AddParameter(cmd, "@title", post.Title);
+                    DbUtils.AddParameter(cmd, "@content", post.Content);
+                    DbUtils.AddParameter(cmd, "@imageLocation", post.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@createDateTime", post.CreateDateTime);
+                    DbUtils.AddParameter(cmd, "@publishDateTime", post.PublishDateTime);
+                    DbUtils.AddParameter(cmd, "@isApproved", post.IsApproved);
+                    DbUtils.AddParameter(cmd, "@categoryId", post.CategoryId);
+                    DbUtils.AddParameter(cmd, "@userProfileId", post.UserProfileId);
+
+                    post.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+        /// <summary>
+        /// Helper function to retrieve a Post object without User from a reader.
+        /// </summary>
+        /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
+        /// <returns>A Post object found in the data from the Reader</returns>
+        private Post NewPostFromReader(SqlDataReader reader)
+        {
+            return new Post()
+            {
+                Id = DbUtils.GetInt(reader, "Id"),
+                Title = DbUtils.GetString(reader, "Title"),
+                Content = DbUtils.GetString(reader, "Content"),
+                ImageLocation = DbUtils.GetNullableString(reader, "HeaderImage"),
+                CreateDateTime = DbUtils.GetDateTime(reader, "PostCreateDateTime"),
+                PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
+                CategoryId = DbUtils.GetInt(reader, "CategoryId"),
+                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
             };
         }
     }

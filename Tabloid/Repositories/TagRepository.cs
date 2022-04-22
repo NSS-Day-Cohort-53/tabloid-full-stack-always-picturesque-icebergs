@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using Tabloid.Models;
 using Tabloid.Utils;
@@ -35,6 +36,72 @@ namespace Tabloid.Repositories
                         return tags; ;
                     }
 
+                }
+            }
+
+
+        }
+
+
+        public void Add(Tag tag)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @" INSERT Into Tag(Name)
+	                   OUTPUT INSERTED.ID values(@Name)";
+                    DbUtils.AddParameter(cmd,"@name", tag.Name);
+
+                    tag.Id = (int)cmd.ExecuteScalar();
+                };
+
+            }
+        }
+
+
+
+
+        public Tag GetTagById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"select Id,Name from tag
+                    where id = @id";
+
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        Tag tag = null;
+                        if (reader.Read())
+                        {
+                            tag = new Tag()
+                            {
+                                Id = id,
+                                Name = DbUtils.GetString(reader, "Name"),
+                            };
+                        }
+                        return tag;
+                    }
+                }
+
+
+            }
+        }
+
+        public void Delete(int id)
+        {using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "Delete from Tag Where id=@id";
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

@@ -3,6 +3,8 @@ using Tabloid.Repositories;
 using Tabloid.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
 
 namespace Tabloid.Controllers
 {
@@ -12,10 +14,12 @@ namespace Tabloid.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostRepository _postRepo;
+        private readonly IUserProfileRepository _userProfileRepo;
 
-        public PostController(IPostRepository postRepository)
+        public PostController(IPostRepository postRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepo = postRepository;
+            _userProfileRepo = userProfileRepository;
         }
 
         [HttpGet]
@@ -24,6 +28,13 @@ namespace Tabloid.Controllers
             return Ok(_postRepo.GetAllPublishedPosts());
         }
 
+        [HttpGet("comments/{id}")]
+        public IActionResult GetWithComments(int id)
+        {
+            var post = _postRepo.GetPostByIdWithComments(id);
+            return Ok(post);
+        }
+        
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -45,6 +56,49 @@ namespace Tabloid.Controllers
 
             _postRepo.Update(post);
             return NoContent();
+        }
+        
+        [HttpPost]
+        public IActionResult Post(Post post)
+        {
+            post.UserProfileId = GetCurrentUserProfile().Id;
+
+            post.CreateDateTime = DateTime.Now;
+
+            post.IsApproved = true;
+
+            if (string.IsNullOrWhiteSpace(post.ImageLocation))
+            {
+                post.ImageLocation = null;
+            }
+
+            _postRepo.Add(post);
+
+            return CreatedAtAction("Get", new { id = post.Id }, post);
+        }
+        
+        [HttpGet("PostsByUser/{id}")]
+        public IActionResult GetPostsByUser(int id)
+        {
+            return Ok(_postRepo.GetAllPostsByUser(id));
+        }
+
+        [HttpGet("MyPosts")]
+        public IActionResult GetPostsByCurrentUser()
+        {
+            var profile = GetCurrentUserProfile();
+            if (profile == null)
+            { 
+                return NotFound();
+            }
+            return Ok(_postRepo.GetAllPostsByUser(profile.Id));
+        }
+
+        //Function for grabbing the current user for use in certain end points
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepo.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }

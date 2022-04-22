@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tabloid.Models
@@ -20,5 +21,6 @@ namespace Tabloid.Models
         public int CategoryId { get; set; }
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }
