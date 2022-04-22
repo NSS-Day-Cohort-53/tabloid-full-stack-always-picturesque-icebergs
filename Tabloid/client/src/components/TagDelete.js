@@ -26,17 +26,7 @@ export const DeleteTag=()=>
             history.push("/tag");
         })
 
-        
-          
-           
-      
-       
-          
-       
-
-    }
-    
-    
+    }   
     
     return (
         <>

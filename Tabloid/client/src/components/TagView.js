@@ -29,8 +29,9 @@ export const Tags=()=>{
             )
             
             }  
-
+            <div>
           <Link to="/tag/new">Create a tag</Link>
+          </div>
         </div>
         </>
 
