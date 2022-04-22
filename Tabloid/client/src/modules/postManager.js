@@ -67,7 +67,7 @@ export const addPost = (post) => {
             } else if (res.status === 401) {
                 throw new Error("Unauthorized");
             } else {
-                throw new Error("An unkown error occurred while trying to save a new post.");
+                throw new Error("An unknown error occurred while trying to save a new post.");
             }
         });
     });
@@ -85,6 +85,27 @@ export const getAllPostsFromCurrentUser = () => {
         return res.json();
       } else {
         throw new Error("An unkown error occurred whilte trying to get posts.");
+      }
+    });
+  });
+};
+
+export const updatePost = (post) => {
+  return getToken().then((token) => {
+    return fetch(`${baseUrl}/`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(post)
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else if (res.status === 401) {
+        throw new Error("Unauthorized");
+      } else {
+        throw new Error("An unknown error occurred while trying to save a new post.");
       }
     });
   });
