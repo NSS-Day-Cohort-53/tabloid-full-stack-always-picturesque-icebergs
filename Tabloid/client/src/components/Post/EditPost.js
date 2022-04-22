@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { updatePost, getPost } from "../../modules/postManager";
 import { getAllCategories } from "../../modules/CategoryManager";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, Link } from "react-router-dom";
 
 const EditPost = () => {
     const [post, setPost] = useState({
@@ -87,6 +87,7 @@ const EditPost = () => {
                 </FormGroup>
                 <FormGroup>
                     <Button>Save</Button>
+                    <Link to="/MyPosts">Cancel</Link>
                 </FormGroup>
             </fieldset>
         </Form>
