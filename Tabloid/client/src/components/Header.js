@@ -10,7 +10,6 @@ import {
   NavLink
 } from 'reactstrap';
 import { logout } from '../modules/authManager';
-import { Tags } from '../modules/TagManagment';
 
 export default function Header({ isLoggedIn }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +35,9 @@ export default function Header({ isLoggedIn }) {
               </NavItem>
               <NavItem>
                 <NavLink tag={RRNavLink} to="/MyPosts">My Posts</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={RRNavLink} to="/posts/new">Create Post</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink tag={RRNavLink} to="/category">

@@ -28,10 +28,6 @@ const CreatePost = () => {
         if (name === "categoryId") {
             value = parseInt(value);
         }
-        //convert publishDateTime to a datetime
-        if (name === "publishDateTime") {
-            value = Date.parse(value);
-        }
         copy[name] = value;
         setPost(copy);
     };
@@ -48,7 +44,7 @@ const CreatePost = () => {
         }
         addPost(copy)
             .then((newPost) => history.push(`/posts/${newPost.id}`))
-            // .catch(() => alert("Invalid Post Submission"));
+            .catch(() => alert("Invalid Post Submission"));
     };
 
     return (
