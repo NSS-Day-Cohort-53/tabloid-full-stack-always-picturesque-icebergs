@@ -8,6 +8,7 @@ import PostDetails from "./Post/PostDetails";
 import MyPosts from "./Post/MyPosts";
 import { Tags } from "./TagView";
 import { CreateTag } from "./TagCreate";
+import { DeleteTag } from "./TagDelete";
 import { AllCategories } from "./Categories";
 import { Comments } from "./Comments/Comments";
 import { AddCategoryForm } from "./AddCategory";
@@ -55,8 +56,11 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Tags />
         </Route>
         <Route path="/tag/new">
-          <CreateTag />
-        </Route>
+          <CreateTag/>
+         </Route>
+         <Route  path="/tag/delete/:id">
+          <DeleteTag/>
+         </Route>
       </Switch>
     </main>
   );

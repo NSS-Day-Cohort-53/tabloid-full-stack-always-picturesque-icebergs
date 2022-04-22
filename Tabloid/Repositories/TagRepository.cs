@@ -92,5 +92,18 @@ namespace Tabloid.Repositories
 
             }
         }
+
+        public void Delete(int id)
+        {using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "Delete from Tag Where id=@id";
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

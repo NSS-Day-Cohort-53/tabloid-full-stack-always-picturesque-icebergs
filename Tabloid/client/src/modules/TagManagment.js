@@ -35,3 +35,51 @@ export const getAllTags = () => {
     });
   });
 };
+
+export const DeleteTags=(id)=>
+{
+    return getToken().then((token)=>
+    {
+      console.log(id)
+      return fetch (`${baseUrl}/${id}`,
+      {
+        method:"Delete",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(resp=>{
+        if (resp.ok) {
+         
+        } else {
+          throw new Error("An unknown error occurred while trying to get the tags.");
+        }
+
+      })
+
+    })
+  
+
+}
+
+export const GetTagById=(id)=>
+{
+  return getToken().then((token)=>
+  {
+    return fetch(`${baseUrl}/${id}`,{
+
+      method:"GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(resp=>{
+        if (resp.ok) {
+          return resp.json();
+        } else {
+          throw new Error("An unknown error occurred while trying to get the tags.");
+        }
+    })
+    
+
+  })
+
+}
