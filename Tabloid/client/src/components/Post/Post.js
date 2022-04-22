@@ -20,6 +20,7 @@ const Post = ({ post, hasTitleLink }) => {
       <CardBody>
         <p className="text-left px-2">{post.content}</p>
         <p className="text-right px-2">Published on: {post.publishDateTime}</p>
+        <Link className="text-left px-2" to={`/posts/edit/${post.id}`}>Edit</Link>
       </CardBody>
     </Card>
   );
